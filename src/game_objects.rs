@@ -83,7 +83,7 @@ impl Player {
     }
 
     pub fn get_torch(&mut self, forest: &mut ForestObj) {
-        if forest.has_mold || !self.inventory.contains(&String::from("shovel")) {
+        if forest.has_mold {
             println!("Can't have the torch yet.");
             return;
         }
