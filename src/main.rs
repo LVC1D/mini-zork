@@ -25,11 +25,6 @@ fn main() -> io::Result<()> {
     );
 
     while player.get_state() == &State::Alive {
-        if player.get_state() == &State::Dead {
-            println!("\nWelp... You tried... Better luck next time.");
-            break;
-        }
-
         if yard.chest_unlocked() {
             println!("Dear Hector... My beloved nephew... If you are reading this note...");
             println!(
@@ -55,6 +50,10 @@ fn main() -> io::Result<()> {
             &RoomId::Yard => go_yard(&mut player, &mut yard)?, // todo!
             &RoomId::Town => go_town(&mut player, &mut town)?, // todo!
         };
+    }
+
+    if player.get_state() == &State::Dead {
+        println!("\nWelp... You tried... Better luck next time.");
     }
 
     Ok(())

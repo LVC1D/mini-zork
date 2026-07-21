@@ -34,7 +34,7 @@ pub fn go_cave(player: &mut Player, cave: &mut CaveObj) -> io::Result<()> {
                     "There is nobody to come rescue you. In a few minutes, you will be no more."
                 );
                 player.die();
-                break;
+                return Ok(());
             }
             "light up torch" | "torch on" => {
                 if !player.check_in_inv("torch") {
@@ -42,6 +42,9 @@ pub fn go_cave(player: &mut Player, cave: &mut CaveObj) -> io::Result<()> {
                     continue;
                 }
 
+                if !cave.is_illuminated() {
+                    cave.toggle_illuminate();
+                }
                 println!(
                     "\nYou are lighting up the torch you found, and you can now see the cave's surroundings better."
                 );
@@ -63,6 +66,15 @@ pub fn go_cave(player: &mut Player, cave: &mut CaveObj) -> io::Result<()> {
                 }
             }
             "turn off torch" | "torch off" => {
+                if !player.check_in_inv("torch") {
+                    println!("\nNo torch is found in your inventory.");
+                    continue;
+                }
+
+                if cave.is_illuminated() {
+                    cave.toggle_illuminate();
+                }
+
                 if cave.get_monster().is_alert() {
                     println!(
                         "\nAs the light from your torch fades, the monster slowly fades back into its normal state, yet the danger remains."
@@ -167,7 +179,7 @@ pub fn go_forest(player: &mut Player, forest: &mut ForestObj) -> io::Result<()> 
                     continue;
                 }
 
-                player.pick_item("torch");
+                player.get_torch(forest);
                 println!("\nRight, got the torch now. I think I'm done waddling around here.");
             }
             "go south" | "south" => {
